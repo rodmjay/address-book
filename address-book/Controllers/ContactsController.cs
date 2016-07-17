@@ -4,7 +4,7 @@ using System.Web.Http;
 namespace AddressBook.Controllers
 {
     [RoutePrefix("api")]
-    public class ValuesController : ApiController
+    public class ContactsController : ApiController
     {
         // GET api/values
         public IEnumerable<string> Get()
