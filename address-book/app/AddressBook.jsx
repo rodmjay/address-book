@@ -49,9 +49,23 @@
             }
         },
         save: function (e) {
-            contactService.save(this.state.name, this.state.phoneNumber);
-            this.setState({ name: '', phoneNumber: '' });
+            var self = this;
             e.preventDefault();
+
+            $.ajax({
+                url: "/api/contacts",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(self.state),
+                success: function () {
+                    self.setState({
+                        name: '',
+                        phoneNumber: ''
+                    });
+                }
+            });
+
         },
         handlePhoneNumberChange: function (e) {
             this.setState({ phoneNumber: e.target.value });

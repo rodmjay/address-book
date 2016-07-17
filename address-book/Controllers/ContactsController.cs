@@ -1,31 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using AddressBook.Models;
+using AddressBook.Service;
 
 namespace AddressBook.Controllers
 {
     [RoutePrefix("api")]
-    public class ContactsController : ApiController
+    public class ContactController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        readonly IContactService _service = new InProcContactService();
+
+        [HttpGet, Route("contacts")]
+        public dynamic Get()
         {
-            return new string[] { "value1", "value2" };
+            var contacts = _service.GetContacts();
+            return Request.CreateResponse(HttpStatusCode.Accepted, contacts);
         }
 
-        // GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        [HttpPost, Route("contacts")]
         // POST api/values
-        public void Post([FromBody]string value)
+        public dynamic Post([FromBody]CreateContactModel value)
         {
+            return Request.CreateResponse(HttpStatusCode.Accepted);
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]UpdateContactModel value)
         {
+            _service.UpdateContact(id, value);
         }
 
         // DELETE api/values/5
