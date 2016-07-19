@@ -27,14 +27,19 @@ namespace AddressBook.Controllers
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]ContactModel value)
+        public dynamic Put(int id, [FromBody]ContactModel value)
         {
             _service.UpdateContact(id, value);
+            return Request.CreateResponse(HttpStatusCode.Accepted);
+
         }
 
         // DELETE api/values/5
-        public void Delete(int id)
+        [HttpDelete, Route("contacts/{id}")]
+        public dynamic Delete(int id)
         {
+            _service.DeleteContact(id);
+            return Request.CreateResponse(HttpStatusCode.Accepted);
         }
     }
 }

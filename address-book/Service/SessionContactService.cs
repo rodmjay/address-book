@@ -44,5 +44,10 @@ namespace AddressBook.Service
 
             return contact;
         }
+
+        public void DeleteContact(int id)
+        {
+            Contacts().RemoveAt(id);
+        }
     }
 }

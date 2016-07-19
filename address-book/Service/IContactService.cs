@@ -8,5 +8,7 @@ namespace AddressBook.Service
         IEnumerable<ContactModel> GetContacts();
         ContactModel UpdateContact(int id, ContactModel value);
         ContactModel CreateContact(ContactModel model);
+
+        void DeleteContact(int id);
     }
 }

@@ -7,21 +7,37 @@
             }
         },
         componentDidMount: function () {
-            this.serverRequest = $.get('/api/contacts', function (result) {
+            $.get('/api/contacts', function (result) {
                 this.setState({
                     contacts: result
                 });
             }.bind(this));
         },
-        handleContactCreated: function (contact) {
+        destroy: function (e) {
 
-            // save the contact
+            var id = parseInt(e.target.getAttribute('data-key'));
+
+            $.ajax({
+                url: "/api/contacts/" + id,
+                type: "DELETE",
+                dataType: "json",
+                success: function () {
+                    console.log('deleted');
+                }.bind(this)
+            });
+
+            this.setState({
+                contacts: this.state.contacts.filter((_, i) => i !== id)
+            });
+
+        },
+        save: function (contact) {
             $.ajax({
                 url: "/api/contacts",
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
-                data: JSON.stringify(this.state),
+                data: JSON.stringify(contact),
                 success: function () {
                     console.log('saved');
                 }.bind(this)
@@ -35,10 +51,10 @@
             return (
  <div className="row">
     <div className="col-md-4">
-        <CreateContact onCreated={this.handleContactCreated} />
+        <CreateContact save={this.save} />
     </div>
     <div className="col-md-8">
-        <ContactList contacts={this.state.contacts} />
+        <ContactList contacts={this.state.contacts} onDestroy={this.destroy} />
     </div>
 </div>);
         }
@@ -51,9 +67,9 @@
                 phoneNumber: ''
             }
         },
-        save: function (e) {
+        handleSubmit: function (e) {
             e.preventDefault();
-            this.props.onCreated(this.state);
+            this.props.save(this.state);
             this.setState(this.getInitialState());
         },
         handlePhoneNumberChange: function (e) {
@@ -64,7 +80,7 @@
         },
         render: function () {
             return (
-<form onSubmit={this.save}>
+<form onSubmit={this.handleSubmit}>
     <div className="form-group">
     <input placeholder="Name"
            type="text"
@@ -79,7 +95,9 @@
            onChange={this.handlePhoneNumberChange}
            className="form-control" />
     </div>
-      <button type="submit" className="btn btn-default">Create Contact</button>
+      <button 
+              type="submit" 
+              className="btn btn-default">Create Contact</button>
 </form>);
         }
     });
@@ -87,11 +105,22 @@
     var ContactList = React.createClass({
         render: function () {
             return (
-              <ol>
-                {this.props.contacts.map(function (result, i) {
-                    return <li key={i}>{result.name}</li>;
-                })}
-              </ol>
+              <table className="table">
+                  <tbody>
+                      
+                      {this.props.contacts.map(function (result, i) {
+                          
+                          return (<tr key={i}>
+                              <th>{result.name}</th>
+                              <td>{result.phoneNumber}</td>
+                              <td>
+                                  <button data-key={i} className="btn" onClick={this.props.onDestroy}>Delete</button>
+                              </td>
+                          </tr>);
+                      }.bind(this))}
+                  </tbody>
+               
+              </table>
             );
         }
     });
