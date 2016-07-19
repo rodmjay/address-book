@@ -9,6 +9,7 @@ namespace AddressBook.Controllers
     [RoutePrefix("api")]
     public class ContactController : ApiController
     {
+        // todo: use IoC container 
         readonly IContactService _service = new SessionContactService();
 
         [HttpGet, Route("contacts")]
@@ -27,7 +28,8 @@ namespace AddressBook.Controllers
         }
 
         // PUT api/values/5
-        public dynamic Put(int id, [FromBody]ContactModel value)
+        [HttpPost, Route("contacts/{id}")]
+        public dynamic Put([FromUri]int id, [FromBody]ContactModel value)
         {
             _service.UpdateContact(id, value);
             return Request.CreateResponse(HttpStatusCode.Accepted);
