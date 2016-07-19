@@ -241,6 +241,8 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Jasmine.cshtml" />
+    <Content Include="specs\AddressBook-spec.jsx" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

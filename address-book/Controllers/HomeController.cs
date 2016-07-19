@@ -8,5 +8,10 @@ namespace AddressBook.Controllers
         {
             return View();
         }
+
+        public ActionResult Jasmine()
+        {
+            return View();
+        }
     }
 }

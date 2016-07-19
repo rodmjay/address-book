@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jasmine Spec Runner</title>
+
+    <!-- start with loading jasmine -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.css">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine-html.js"></script>
+
+    <!-- then require.js -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js"></script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/react")
+
+    <!-- include source files here... -->
+    <script type="text/javascript" src="~/app/AddressBook.jsx"></script>
+
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="~/specs/AddressBook-spec.jsx"></script>
+
+    <script type="text/javascript">
+  window.addEventListener("load", function onLoad() {
+    var jasmineEnv = jasmine.getEnv(),
+        reporter = new jasmine.TrivialReporter();
+
+    jasmineEnv.addReporter(reporter);
+    setTimeout(function () {
+        jasmineEnv.execute();
+       // Without this setTimeout, the specs don't always get execute in webKit browsers, I don't know why
+    }, 10);
+    window.removeEventListener("load", onLoad, true);
+  }, true);
+    </script>
+
+</head>
+
+<body>
+</body>
+</html>

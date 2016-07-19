@@ -61,9 +61,11 @@
             return (
  <div className="row">
     <div className="col-md-3">
-        <CreateContact onCreate={this.create} />
+        <div className="well">
+            <CreateContact onCreate={this.create} />
+        </div>
     </div>
-    <div className="col-md-9 well">
+    <div className="col-md-9 ">
         <table className="table">
             <thead>
                 <tr>
@@ -161,8 +163,7 @@
                 <th><input type="text" onChange={this.handleNameChange} className="form-control" value={this.state.name} /></th>
                 <td><input type="text" onChange={this.handlePhoneNumberChange} className="form-control" value={this.state.phoneNumber} /></td>
                 <td>
-                                        <button className="btn btn-info" onClick={this.handleUpdateButtonClick}>Update</button>
-
+                    <button className="btn btn-info" onClick={this.handleUpdateButtonClick}>Update</button>
                     <button className="btn btn-danger" onClick={this.handleDeleteButtonClick}>Delete</button>
                 </td>
               </tr>
