@@ -1,24 +1,9 @@
 ﻿(function () {
 
-    var contactService = (function() {
-        return{
-            save: function(contact, name, phoneNumber) {
-                console.log('contact', contact);
-            },
-            create: function(name, phoneNumber) {
-                console.log('create',
-                {
-                    name: name,
-                    phoneNumber: phoneNumber
-                });
-            }
-        }
-    })();
-
     var AddressBook = React.createClass({
-        getInitialState:function() {
+        getInitialState: function () {
             return {
-                contacts:[]
+                contacts: []
             }
         },
         componentDidMount: function () {
@@ -28,11 +13,29 @@
                 });
             }.bind(this));
         },
+        handleContactCreated: function (contact) {
+
+            // save the contact
+            $.ajax({
+                url: "/api/contacts",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(this.state),
+                success: function () {
+                    console.log('saved');
+                }.bind(this)
+            });
+
+            this.setState({
+                contacts: this.state.contacts.concat([contact])
+            });
+        },
         render: function () {
             return (
  <div className="row">
     <div className="col-md-4">
-        <CreateContact />
+        <CreateContact onCreated={this.handleContactCreated} />
     </div>
     <div className="col-md-8">
         <ContactList contacts={this.state.contacts} />
@@ -49,23 +52,9 @@
             }
         },
         save: function (e) {
-            var self = this;
             e.preventDefault();
-
-            $.ajax({
-                url: "/api/contacts",
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify(self.state),
-                success: function () {
-                    self.setState({
-                        name: '',
-                        phoneNumber: ''
-                    });
-                }
-            });
-
+            this.props.onCreated(this.state);
+            this.setState(this.getInitialState());
         },
         handlePhoneNumberChange: function (e) {
             this.setState({ phoneNumber: e.target.value });
@@ -96,13 +85,11 @@
     });
 
     var ContactList = React.createClass({
-
         render: function () {
-            var results = this.props.contacts;
             return (
               <ol>
-                {results.map(function(result) {
-                    return <li key={result.name}>{result.name}</li>;
+                {this.props.contacts.map(function (result, i) {
+                    return <li key={i}>{result.name}</li>;
                 })}
               </ol>
             );

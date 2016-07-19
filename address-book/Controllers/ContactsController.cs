@@ -9,7 +9,7 @@ namespace AddressBook.Controllers
     [RoutePrefix("api")]
     public class ContactController : ApiController
     {
-        readonly IContactService _service = new InProcContactService();
+        readonly IContactService _service = new SessionContactService();
 
         [HttpGet, Route("contacts")]
         public dynamic Get()
@@ -20,13 +20,14 @@ namespace AddressBook.Controllers
 
         [HttpPost, Route("contacts")]
         // POST api/values
-        public dynamic Post([FromBody]CreateContactModel value)
+        public dynamic Post([FromBody]ContactModel value)
         {
+            _service.CreateContact(value);
             return Request.CreateResponse(HttpStatusCode.Accepted);
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]UpdateContactModel value)
+        public void Put(int id, [FromBody]ContactModel value)
         {
             _service.UpdateContact(id, value);
         }
