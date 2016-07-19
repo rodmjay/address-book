@@ -3,8 +3,7 @@
     var AddressBook = React.createClass({
         getInitialState: function () {
             return {
-                contacts: [],
-                editContact: null
+                contacts: []
             }
         },
         componentDidMount: function () {
@@ -14,9 +13,7 @@
                 });
             }.bind(this));
         },
-        destroy: function (e) {
-
-            var id = parseInt(e.target.getAttribute('data-key'));
+        destroy: function (id) {
 
             $.ajax({
                 url: "/api/contacts/" + id,
@@ -32,12 +29,6 @@
             });
 
         },
-        edit: function(e) {
-            var id = e.target.getAttribute('data-key');
-            this.setState({
-                editContact: this.state.contacts.filter((_, i) => i === id)
-            });
-        },
         update: function(id, contact) {
             $.ajax({
                 url: "/api/contacts/"+id,
@@ -50,7 +41,7 @@
                 }.bind(this)
             });
         },
-        save: function (contact) {
+        create: function (contact) {
             $.ajax({
                 url: "/api/contacts",
                 type: "POST",
@@ -70,7 +61,7 @@
             return (
  <div className="row">
     <div className="col-md-3">
-        <CreateContact onSave={this.save} />
+        <CreateContact onCreate={this.create} />
     </div>
     <div className="col-md-9 well">
         <table className="table">
@@ -78,6 +69,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Phone Number</th>
+                    <th></th>
                 </tr>
             </thead>
                   <tbody>
@@ -109,7 +101,7 @@
         },
         handleSubmit: function (e) {
             e.preventDefault();
-            this.props.onSave(this.state);
+            this.props.onCreate(this.state);
             this.setState(this.getInitialState());
         },
         handlePhoneNumberChange: function (e) {
@@ -137,7 +129,7 @@
     </div>
       <button 
               type="submit" 
-              className="btn btn-default">Create Contact</button>
+              className="btn btn-primary">Create Contact</button>
 </form>);
         }
     });
@@ -145,9 +137,11 @@
     var Contact = React.createClass({
         handleUpdateButtonClick:function(e) {
             this.props.onUpdate(this.props.id, this.state);
+            e.preventDefault();
         },
         handleDeleteButtonClick: function (e) {
             this.props.onDestroy(this.props.id);
+            e.preventDefault();
         },
         handlePhoneNumberChange: function (e) {
             this.setState({ phoneNumber: e.target.value });
@@ -167,8 +161,9 @@
                 <th><input type="text" onChange={this.handleNameChange} className="form-control" value={this.state.name} /></th>
                 <td><input type="text" onChange={this.handlePhoneNumberChange} className="form-control" value={this.state.phoneNumber} /></td>
                 <td>
-                    <button className="btn" onClick={this.handleDeleteButtonClick}>Delete</button>
-                    <button className="btn" onClick={this.handleUpdateButtonClick}>Update</button>
+                                        <button className="btn btn-info" onClick={this.handleUpdateButtonClick}>Update</button>
+
+                    <button className="btn btn-danger" onClick={this.handleDeleteButtonClick}>Delete</button>
                 </td>
               </tr>
             );
