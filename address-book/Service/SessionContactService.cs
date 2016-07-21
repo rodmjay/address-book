@@ -15,7 +15,7 @@ namespace AddressBook.Service
             { 
                 HttpContext.Current.Session["Contacts"] = session = new List<ContactModel>();
             }
-            return (List<ContactModel>)session;
+            return (IList<ContactModel>)session;
         }
 
         public IEnumerable<ContactModel> GetContacts()
@@ -23,17 +23,15 @@ namespace AddressBook.Service
             return Contacts();
         }
 
-        public ContactModel UpdateContact(int id, ContactModel value)
+        public void UpdateContact(int id, ContactModel value)
         {
             var contact = Contacts()[id];
 
             contact.Name = value.Name;
             contact.PhoneNumber = value.PhoneNumber;
-
-            return contact;
         }
 
-        public ContactModel CreateContact(ContactModel model)
+        public void CreateContact(ContactModel model)
         {
             var contact = new ContactModel
             {
@@ -41,8 +39,6 @@ namespace AddressBook.Service
                 PhoneNumber = model.PhoneNumber,
             };
             Contacts().Add(contact);
-
-            return contact;
         }
 
         public void DeleteContact(int id)

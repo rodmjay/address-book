@@ -6,8 +6,8 @@ namespace AddressBook.Service
     public interface IContactService
     {
         IEnumerable<ContactModel> GetContacts();
-        ContactModel UpdateContact(int id, ContactModel value);
-        ContactModel CreateContact(ContactModel model);
+        void UpdateContact(int id, ContactModel value);
+        void CreateContact(ContactModel model);
 
         void DeleteContact(int id);
     }
