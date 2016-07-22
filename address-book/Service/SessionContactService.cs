@@ -24,7 +24,7 @@ namespace AddressBook.Service
             return (IList<ContactModel>)session;
         }
 
-        public IEnumerable<ContactModel> GetContacts()
+        public IList<ContactModel> GetContacts()
         {
             return Contacts();
         }
