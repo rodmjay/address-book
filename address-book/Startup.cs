@@ -1,9 +1,15 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Reflection;
+using System.Web;
+using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Mvc;
 using AddressBook;
 using AddressBook.Service;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Owin;
 
@@ -22,16 +28,31 @@ namespace AddressBook
             config.MapHttpAttributeRoutes();
             config.Formatters.Clear();
             config.Formatters.Add(new BrowserJsonFormatter());
-            app.UseWebApi(config);
 
             var builder = new ContainerBuilder();
-            builder.RegisterType<SessionContactService>().As<IContactService>();
+
+            builder.RegisterType<SessionContactService>()
+                .As<IContactService>()
+                .InstancePerRequest();
+
+            builder.Register(c => new HttpContextWrapper(HttpContext.Current))
+                .As<HttpContextBase>()
+                .InstancePerRequest();
+
+            builder.Register(c => c.Resolve<HttpContextBase>().Session)
+                 .As<HttpSessionStateBase>()
+                 .InstancePerRequest();
+
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             var container = builder.Build();
 
-            // Register the Autofac middleware FIRST. This also adds
-            // Autofac-injected middleware registered with the container.
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
             app.UseAutofacMiddleware(container);
+            app.UseAutofacWebApi(config);
+            app.UseWebApi(config);
+
         }
     }
 }

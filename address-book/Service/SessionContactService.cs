@@ -7,13 +7,19 @@ namespace AddressBook.Service
 {
     public class SessionContactService : IContactService
     {
+        private readonly HttpSessionStateBase _sessionBase;
+
+        public SessionContactService(HttpSessionStateBase sessionBase)
+        {
+            _sessionBase = sessionBase;
+        }
 
         private IList<ContactModel> Contacts()
         {
-            var session = HttpContext.Current.Session["Contacts"];
+            var session = _sessionBase["Contacts"];
             if (session == null)
-            { 
-                HttpContext.Current.Session["Contacts"] = session = new List<ContactModel>();
+            {
+                _sessionBase["Contacts"] = session = new List<ContactModel>();
             }
             return (IList<ContactModel>)session;
         }
