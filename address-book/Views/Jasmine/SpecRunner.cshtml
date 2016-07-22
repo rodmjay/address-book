@@ -16,17 +16,12 @@
 <body>
     <div id="addressbook"></div>
 
-
-    <script type="text/javascript" src="/Scripts/jasmine/jasmine.js"></script>
-    <script type="text/javascript" src="/Scripts/jasmine/jasmine-html.js"></script>
-    <script type="text/javascript" src="/Scripts/jasmine/boot.js"></script>
-
+    @Scripts.Render("~/bundles/jasmine")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/react")
 
     <!-- include source files here... -->
-    <script type="text/javascript" src="/Scripts/jasmine-samples/SpecHelper.js"></script>
     <script type="text/javascript" src="~/specs/AddressBook-spec.jsx"></script>
 
     <!-- include spec files here... -->
