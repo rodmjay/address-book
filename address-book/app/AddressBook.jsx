@@ -12,13 +12,14 @@ var AddressBook = React.createClass({
             });
         }.bind(this));
     },
-    destroy: function (id, successFn) {
-        successFn = successFn || function () { };
+    destroy: function (id) {
         $.ajax({
             url: "/api/contacts/" + id,
             type: "DELETE",
             dataType: "json",
-            success: successFn
+            success:function() {
+                console.log('destroy', id);
+            }
         });
 
         this.setState({
@@ -26,26 +27,32 @@ var AddressBook = React.createClass({
         });
 
     },
-    update: function (id, contact, successFn) {
-        successFn = successFn || function () { };
+    update: function (id, contact) {
         $.ajax({
             url: "/api/contacts/" + id,
             type: "POST",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(contact),
-            success: successFn
+            success: function () {
+                console.log('update', id, contact);
+            }
+        });
+        this.state.contacts[id] = contact;
+        this.setState({
+            contacts: this.state.contacts
         });
     },
-    create: function (contact, successFn) {
-        successFn = successFn || function(){};
+    create: function (contact) {
         $.ajax({
             url: "/api/contacts",
             type: "POST",
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(contact),
-            success: successFn
+            success: function () {
+                console.log('create', contact);
+            }
         });
 
         this.setState({
