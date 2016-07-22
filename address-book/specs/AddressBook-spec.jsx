@@ -16,6 +16,7 @@
             name: 'test',
             phoneNumber: 'test2'
         });
+
         expect(instance.state.contacts.length).toEqual(count + 1);
     });
 

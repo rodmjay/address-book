@@ -24,14 +24,14 @@ namespace AddressBook.Controllers
         }
 
         [HttpPost, Route("contacts")]
-        public dynamic Post([FromBody]ContactModel value)
+        public dynamic Create([FromBody]ContactModel value)
         {
             _contactService.CreateContact(value);
             return Request.CreateResponse(HttpStatusCode.Accepted);
         }
 
         [HttpPost, Route("contacts/{id}")]
-        public dynamic Put([FromUri]int id, [FromBody]ContactModel value)
+        public dynamic Update([FromUri]int id, [FromBody]ContactModel value)
         {
             _contactService.UpdateContact(id, value);
             return Request.CreateResponse(HttpStatusCode.Accepted);
